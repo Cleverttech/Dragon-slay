@@ -165,6 +165,7 @@ function drawMainUi() {
 function drawSplashUI() {
   startBtn.style.display = "block";
   splashScreen.style.display = "block";
+  winScreen.style.display = "none";
   gameover.style.display = "none";
   scoreText.style.display = "none";
   canvas.style.display = "none";
@@ -208,8 +209,7 @@ function drawBabyUpdate(
 //Win screen
 function drawWinScreen() {
   winScreen.style.display = "block";
-  restartBtn2.style.display = "block";
-  restartBtn.style.display = "none";
+  restartBtn.style.display = "block";
   gameover.style.display = "none";
   splashScreen.style.display = "none";
   canvas.style.display = "none";
@@ -361,14 +361,6 @@ function moveEnemies() {
   }
 }
 
-function winCheck() {
-  if (score == 2) {
-    isWinGame = true;
-    // if (isWinGame) {
-    drawWinScreen();
-    // }
-  }
-}
 // Collision + winning condition
 function collision() {
   for (let i = 0; i < enemies.length; i++) {
@@ -380,7 +372,9 @@ function collision() {
     ) {
       isGameOver = true;
     }
-
+    if (score == 2) {
+      isWinGame = true;
+    }
     for (let j = 0; j < fireballs.length; j++) {
       if (
         fireballs[j].x < enemies[i].x + enemies[i].width &&
@@ -411,6 +405,8 @@ function collision() {
 }
 //RESET game variables
 function reset() {
+  motherX = 100;
+  motherY = canvas.height - 110;
   intervalId = 0;
   incrSpeed = false;
   isGameOver = false;
@@ -473,13 +469,19 @@ function mainGameOnStart() {
     reset();
     cancelAnimationFrame(intervalId);
     gameOverUI();
-  } else {
+  } else if (isWinGame) {
+    reset();
+    cancelAnimationFrame(intervalId);
+    drawWinScreen();
+  }
+  {
     intervalId = requestAnimationFrame(mainGameOnStart);
   }
 }
 
 //EVENT Listeners
 window.addEventListener("load", () => {
+  win;
   drawSplashUI();
   // gameOverUI();
 
@@ -489,11 +491,11 @@ window.addEventListener("load", () => {
     reset();
     mainGameOnStart();
   });
-  restartBtn2.addEventListener("click", () => {
-    // ctx.clearRect(0, 0, canvas.width, canvas.height);
-    reset();
-    mainGameOnStart();
-  });
+  // restartBtn2.addEventListener("click", () => {
+  //   // ctx.clearRect(0, 0, canvas.width, canvas.height);
+  //   reset();
+  //   mainGameOnStart();
+  // });
   //start button-- still to implement click within the button image on canvas
   startBtn.addEventListener("click", () => {
     mainGameOnStart();

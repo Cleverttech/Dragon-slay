@@ -10,8 +10,8 @@
   background: url("./assets/playscreen.png");
   width: 600px;
   height: 800px;
-  position: relative;
-  float: right;
+  /* position: relative;
+  float: right; */
 }
 .margin-left {
   margin-left: 150px;
