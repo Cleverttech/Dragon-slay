@@ -473,8 +473,7 @@ function mainGameOnStart() {
     reset();
     cancelAnimationFrame(intervalId);
     drawWinScreen();
-  }
-  {
+  } else {
     intervalId = requestAnimationFrame(mainGameOnStart);
   }
 }
@@ -486,15 +485,10 @@ window.addEventListener("load", () => {
 
   //restart Button
   restartBtn.addEventListener("click", () => {
-    // ctx.clearRect(0, 0, canvas.width, canvas.height);
     reset();
     mainGameOnStart();
   });
-  // restartBtn2.addEventListener("click", () => {
-  //   // ctx.clearRect(0, 0, canvas.width, canvas.height);
-  //   reset();
-  //   mainGameOnStart();
-  // });
+
   //start button-- still to implement click within the button image on canvas
   startBtn.addEventListener("click", () => {
     mainGameOnStart();
