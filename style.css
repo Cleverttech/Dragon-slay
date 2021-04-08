@@ -1,17 +1,20 @@
+html {
+  height: 100%;
+
+  width: 100%;
+  margin: 0px;
+}
 body {
   background: url("./assets/Hintergrund.jpg");
   background-size: cover;
-  height: 100%;
-  width: 100%;
-  margin: 0px;
 }
 
 #myCanvas {
   background: url("./assets/playscreen.png");
 }
-#scoreText {
+/* #scoreText {
   margin-top: 8px;
-}
+} */
 #splashscreen {
   background: url("./assets/playscreen.png");
   width: 600px;
