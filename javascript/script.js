@@ -488,6 +488,10 @@ window.addEventListener("load", () => {
     reset();
     mainGameOnStart();
   });
+  restartBtn2.addEventListener("click", () => {
+    reset();
+    mainGameOnStart();
+  });
 
   //start button-- still to implement click within the button image on canvas
   startBtn.addEventListener("click", () => {
