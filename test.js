@@ -235,7 +235,7 @@ function collionBabyMother() {
     isWinGame = true;
   }
 }
-//draw baby
+//draw baby + appearance condition
 function drawBabyUpdate(
   babyFrame,
   frameX,
@@ -245,7 +245,7 @@ function drawBabyUpdate(
   updateWidth,
   updateHeight
 ) {
-  if (score >= 10) {
+  if (score >= 2) {
     ctx.drawImage(
       babyFrame,
       frameX * babyFrame.width,
@@ -262,11 +262,10 @@ function drawBabyUpdate(
 
 // move baby
 function characterAnimate(pWidth, pHeight, onCanvasX, onCanvasY) {
-  //to keep track of number of frames
   frameCount += 1.4;
   ctx.clearRect(onCanvasX, onCanvasY, pWidth, pHeight);
   ctx.imageSmoothingEnabled = false;
-  if (frameCount <= 15) {
+  if (frameCount <= 7) {
     // requestAnimationFrame(characterAnimate);
     drawBabyUpdate(
       babyFrame,
@@ -285,8 +284,8 @@ function characterAnimate(pWidth, pHeight, onCanvasX, onCanvasY) {
   if (currentLoopIndex >= cycleLoop.length) {
     currentLoopIndex = 0;
   }
-  window.requestAnimationFrame(characterAnimate);
-  return;
+  //   window.requestAnimationFrame(characterAnimate);
+  //   return;
 }
 //draw & MoveMother
 function moveMother() {
@@ -301,8 +300,24 @@ function moveMother() {
 
   if (isArrowDown && mother1.height + motherY < canvas.height) motherY += 10;
 }
+
+let frameNo = 0;
+const switchImg = [mother2, mother1]; // add animation sequence to arr
+const switchImgFrames = 15;
 //to animate mother sprite
-function motherAnim() {}
+function motherAnim() {
+  frameNo += 1.4;
+  ctx.clearRect(0, 0, canvas.width, canvas.height);
+  ctx.imageSmoothingEnabled = false;
+  const motherImg =
+    switchImg[((frameNo / switchImgFrames) | 0) % switchImg.length];
+  if (isArrowRight || isArrowLeft) {
+    ctx.drawImage(motherImg, motherX, motherY, mother1.width, mother1.height);
+  } else {
+    ctx.drawImage(mother1, motherX, motherY, mother1.width, mother1.height);
+  }
+  //   window.requestAnimationFrame(motherAnim);
+}
 
 //cloud animation
 function moveCloud() {
@@ -498,11 +513,12 @@ function reset() {
 
 //----MAINGAME putting it all together-----
 function mainGameOnStart() {
+  //   ctx.clearRect(0, 0, canvas.width, canvas.height);
   drawMainUi();
   moveCloud();
-  characterAnimate(65, 69, 545, 260);
   moveMother();
-  // motherAnim();
+  motherAnim();
+  characterAnimate(65, 69, 545, 260);
   createFireball();
   drawFireball(); //fireballs
   moveEnemies(); // making the enemies moves
