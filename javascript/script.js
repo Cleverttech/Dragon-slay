@@ -377,9 +377,9 @@ function moveEnemies() {
 function collision() {
   for (let i = 0; i < enemies.length; i++) {
     if (
-      motherX + 50 < enemies[i].x + enemies[i].width &&
+      motherX - 50 < enemies[i].x + enemies[i].width &&
       motherX + mother1.width > enemies[i].x &&
-      motherY + 50 < enemies[i].y + enemies[i].height &&
+      motherY - 50 < enemies[i].y + enemies[i].height &&
       motherY + enemies[i].height > enemies[i].y
     ) {
       isGameOver = true;
