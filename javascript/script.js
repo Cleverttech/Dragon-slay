@@ -60,8 +60,10 @@ canvas.width = "600";
 canvas.height = "800";
 
 let intervalId = 0;
+let incrSpeed = false;
 let isGameOver = false;
 let score = 0;
+let score2 = score;
 let canvasX = 0,
   canvasY = 0;
 //cloud position Array
@@ -90,13 +92,22 @@ let isSpaceKey = false;
 //fireballs variables
 fireball.width = 20;
 fireball.height = 20;
+let imgArr = [enemy1, enemy2];
 let fireballs = [];
 let fire = true;
 let fireballY = motherY + mother1.height;
 let fireballX = motherX;
 let incrBall = 20;
 let initalSize = randomSize(); //for resizing enemies
-let enemies = [{ x: 30, y: 30, width: initalSize[0], height: initalSize[1] }];
+let enemies = [
+  {
+    x: 30,
+    y: 30,
+    width: initalSize[0],
+    height: initalSize[1],
+    img: imgArr[Math.floor(Math.random() * imgArr.length)],
+  },
+];
 let incrSpeedEnemies = 2;
 
 //----EVENT LISTENERS for MOTHER Dragon movements---
@@ -301,35 +312,40 @@ function randomSize() {
   let randomHeight = randomWidth * 1.4;
   return [randomWidth, randomHeight];
 }
+function speedIncr() {
+  if (score > 0 && score % 5 === 0 && incrSpeed) {
+    incrSpeed = false;
+    incrSpeedEnemies *= 1.35;
+    console.log(incrSpeedEnemies);
+  }
+}
 
 function moveEnemies() {
   for (let i = 0; i < enemies.length; i++) {
     ctx.drawImage(
-      enemy1,
+      enemies[i].img,
       enemies[i].x,
       enemies[i].y,
       enemy1.width,
       enemy1.height
     );
+
     enemies[i].y += incrSpeedEnemies;
 
-    if (enemies[i].y == enemy1.height / 2) {
+    if (enemies[i].y > 50 && enemies[i].y <= 50 + incrSpeedEnemies) {
       initalSize = randomSize();
       enemies.push({
         x: Math.floor(Math.random() * (canvas.width - enemy1.width)),
         y: -enemy1.height,
         width: initalSize[0],
         height: initalSize[1],
+        img: imgArr[Math.floor(Math.random() * imgArr.length)],
       });
-      if (score % 5 === 0) {
-        incrSpeedEnemies *= 1.2;
-      }
     }
-    if (enemies[i].y == canvas.height + 2) {
+    if (enemies[i].y > canvas.height + 2) {
       enemies.shift();
       score--;
-      // scoreText.innerText = `Score : ${score}`;
-      console.log(score);
+      // scoreText.innerText = `Score : ${score}`
     }
   }
 }
@@ -338,9 +354,9 @@ function collision() {
   for (let i = 0; i < enemies.length; i++) {
     if (
       motherX < enemies[i].x + enemies[i].width &&
-      motherX - 50 + mother1.width > enemies[i].x &&
+      motherX + mother1.width > enemies[i].x &&
       motherY < enemies[i].y + enemies[i].height &&
-      motherY - 50 + enemies[i].height > enemies[i].y
+      motherY + enemies[i].height > enemies[i].y
     ) {
       isGameOver = true;
     }
@@ -356,8 +372,9 @@ function collision() {
         enemies.splice(i, 1);
         fire = true;
         score++;
+        incrSpeed = true;
 
-        console.log(score);
+        console.log(score, score2);
         if (enemies.length <= 0) {
           initalSize = randomSize();
           enemies.push({
@@ -365,6 +382,7 @@ function collision() {
             y: -enemy1.height,
             width: initalSize[0],
             height: initalSize[1],
+            img: imgArr[Math.floor(Math.random() * imgArr.length)],
           });
         }
       }
@@ -376,7 +394,9 @@ function reset() {
   ctx.clearRect(0, 0, canvas.width, canvas.height);
   intervalId = 0;
   isGameOver = false;
+  incrSpeedEnemies = 2;
   score = 0;
+  score2 = 0;
   (canvasX = 0), (canvasY = 0);
   //cloud position Array
   clouds = [
@@ -412,7 +432,7 @@ function mainGameOnStart() {
   drawFireball(); //fireballs
   moveEnemies(); // making the enemies moves
   collision(); //all collisions
-
+  speedIncr();
   //define GameOver
   if (isGameOver) {
     cancelAnimationFrame(intervalId);
@@ -431,7 +451,6 @@ window.addEventListener("load", () => {
   restartBtn.addEventListener("click", () => {
     reset();
     mainGameOnStart();
-    console.log("clicked");
   });
   //start button-- still to implement click within the button image on canvas
   startBtn.addEventListener("click", () => {

@@ -1,3 +1,20 @@
+let isWinGame = false;
+function drawWinScreen() {
+  ctx.drawImage(playscreen, 0, 0);
+  ctx.font = "22px Verdana";
+  ctx.fillText(`CONGRATULATIONS`, 20, 300);
+}
+if (isGameOver) {
+  cancelAnimationFrame(intervalId);
+  gameOverUI();
+} else if (isWinGame) {
+  // cancelAnimationFrame(intervalId);
+  drawWinScreen();
+} else {
+  intervalId = requestAnimationFrame(mainGameOnStart);
+}
+
+//anime
 var canvas, ctx, mother, motherPng, key, frameNo;
 canvas = document.getElementById("myCanvas");
 ctx = canvas.getContext("2d");
