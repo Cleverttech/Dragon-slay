@@ -5,7 +5,9 @@ let ctx = canvas.getContext("2d");
 //DOM Elements
 let startBtn = document.querySelector("#start");
 let restartBtn = document.querySelector("#restart");
+let restartBtn2 = document.querySelector("#restart2");
 let gameover = document.querySelector("#gameover");
+let winScreen = document.querySelector("#winscreen");
 let totalKilled = document.querySelector("#gameover h3");
 let splashScreen = document.querySelector("#splashscreen");
 let scoreText = document.querySelector("#scoreText");
@@ -72,8 +74,6 @@ let clouds = [
   { x: 300, y: 400 },
 ];
 
-//Variables for drawBabyUpdate();
-
 //Variables for characterAnimate()
 let cycleLoop = [0, 1];
 let currentLoopIndex = 0;
@@ -92,13 +92,14 @@ let isSpaceKey = false;
 //fireballs variables
 fireball.width = 20;
 fireball.height = 20;
-let imgArr = [enemy1, enemy2];
+
 let fireballs = [];
 let fire = true;
 let fireballY = motherY + mother1.height;
 let fireballX = motherX;
 let incrBall = 20;
 let initalSize = randomSize(); //for resizing enemies
+let imgArr = [enemy1, enemy2];
 let enemies = [
   {
     x: 30,
@@ -109,6 +110,8 @@ let enemies = [
   },
 ];
 let incrSpeedEnemies = 2;
+let isWinGame = false;
+winScreen.style.display = "none";
 
 //----EVENT LISTENERS for MOTHER Dragon movements---
 document.addEventListener("keydown", (event) => {
@@ -179,9 +182,7 @@ function gameOverUI() {
   // gameoverAudio.play();
   // intervalId = requestAnimationFrame(gameOverUI);
 }
-function drawWinScreen() {
-  ctx.drawImage(playscreen, 0, 0);
-}
+
 //draw baby
 function drawBabyUpdate(
   babyFrame,
@@ -204,7 +205,16 @@ function drawBabyUpdate(
     updateHeight // scaledHeight
   );
 }
-
+//Win screen
+function drawWinScreen() {
+  winScreen.style.display = "block";
+  restartBtn2.style.display = "block";
+  restartBtn.style.display = "none";
+  gameover.style.display = "none";
+  splashScreen.style.display = "none";
+  canvas.style.display = "none";
+  scoreText.style.display = "none";
+}
 // move baby
 function characterAnimate(pWidth, pHeight, onCanvasX, onCanvasY) {
   //to keep track of number of frames
@@ -312,6 +322,8 @@ function randomSize() {
   let randomHeight = randomWidth * 1.4;
   return [randomWidth, randomHeight];
 }
+
+//increase speed of enemies
 function speedIncr() {
   if (score > 0 && score % 5 === 0 && incrSpeed) {
     incrSpeed = false;
@@ -345,11 +357,19 @@ function moveEnemies() {
     if (enemies[i].y > canvas.height + 2) {
       enemies.shift();
       score--;
-      // scoreText.innerText = `Score : ${score}`
     }
   }
 }
-// Collision
+
+function winCheck() {
+  if (score == 2) {
+    isWinGame = true;
+    // if (isWinGame) {
+    drawWinScreen();
+    // }
+  }
+}
+// Collision + winning condition
 function collision() {
   for (let i = 0; i < enemies.length; i++) {
     if (
@@ -391,12 +411,11 @@ function collision() {
 }
 //RESET game variables
 function reset() {
-  ctx.clearRect(0, 0, canvas.width, canvas.height);
   intervalId = 0;
+  incrSpeed = false;
   isGameOver = false;
-  incrSpeedEnemies = 2;
   score = 0;
-  score2 = 0;
+  score2 = score;
   (canvasX = 0), (canvasY = 0);
   //cloud position Array
   clouds = [
@@ -404,21 +423,37 @@ function reset() {
     { x: 300, y: 400 },
   ];
 
-  //Variables for characterAnimate()
   cycleLoop = [0, 1];
   currentLoopIndex = 0;
   frameCount = 0;
 
-  //Variables for drawMother()
-  (motherX = 100), (motherY = canvas.height - 110), (incrX = 2), (incrY = 2);
+  (incrX = 2), (incrY = 2);
+  isArrowUp = false;
+  isArrowRight = false;
+  isArrowLeft = false;
+  isSpaceKey = false;
+  //fireballs variables
+  fireball.width = 20;
+  fireball.height = 20;
 
-  (fireballs = []),
-    (fire = true),
-    (fireballY = motherY + mother1.height),
-    (fireballX = motherX),
-    (incrBall = 20);
+  fireballs = [];
+  fire = true;
+  fireballY = motherY + mother1.height;
+  fireballX = motherX;
+  incrBall = 20;
   initalSize = randomSize(); //for resizing enemies
-  enemies = [{ x: 30, y: 30, width: initalSize[0], height: initalSize[1] }];
+
+  enemies = [
+    {
+      x: 30,
+      y: 30,
+      width: initalSize[0],
+      height: initalSize[1],
+      img: imgArr[Math.floor(Math.random() * imgArr.length)],
+    },
+  ];
+  incrSpeedEnemies = 2;
+  isWinGame = false;
 }
 
 //----MAINGAME putting it all together-----
@@ -435,6 +470,7 @@ function mainGameOnStart() {
   speedIncr();
   //define GameOver
   if (isGameOver) {
+    reset();
     cancelAnimationFrame(intervalId);
     gameOverUI();
   } else {
@@ -449,6 +485,12 @@ window.addEventListener("load", () => {
 
   //restart Button
   restartBtn.addEventListener("click", () => {
+    // ctx.clearRect(0, 0, canvas.width, canvas.height);
+    reset();
+    mainGameOnStart();
+  });
+  restartBtn2.addEventListener("click", () => {
+    // ctx.clearRect(0, 0, canvas.width, canvas.height);
     reset();
     mainGameOnStart();
   });
