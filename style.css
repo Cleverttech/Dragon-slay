@@ -1,10 +1,24 @@
+body {
+  background: url("./assets/playscreen.png");
+  background-size: cover;
+  height: 100%;
+  width: 100%;
+  margin: 0px;
+}
+
 #myCanvas {
   background: url("./assets/playscreen.png");
+}
+#scoreText {
+  margin-top: 8px;
 }
 #splashscreen {
   background: url("./assets/playscreen.png");
   width: 600px;
   height: 800px;
+}
+.center {
+  margin: auto;
 }
 #winscreen {
   background: url("./assets/playscreen.png");
