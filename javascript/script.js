@@ -5,7 +5,7 @@ let ctx = canvas.getContext("2d");
 //DOM Elements
 let startBtn = document.querySelector("#start");
 let restartBtn = document.querySelector("#restart");
-let restartBtn2 = document.querySelector("#restart2");
+let continueBtn = document.querySelector("#continue");
 let gameover = document.querySelector("#gameover");
 let winScreen = document.querySelector("#winscreen");
 let totalKilled = document.querySelector("#gameover h3");
@@ -49,14 +49,20 @@ fireball.src = "./assets/fireball.png";
 let wingsAudio = new Audio("./assets/wings-sound.wav");
 wingsAudio.loop = "false";
 
+let winAudio = new Audio("./assets/win-sound.wav");
+winAudio.loop = "false";
+winAudio.volume = 0.06;
+
 let fireballWhoosh = new Audio("./assets/fireball-whoosh.wav");
-// fireballWhoosh.loop = "true";
+fireballWhoosh.volume = 0.06;
 
 let gameoverAudio = new Audio("./assets/gameover-sound.wav");
 gameoverAudio.loop = "false";
+gameoverAudio.volume = 0.07;
 
 let mainAudio = new Audio("./assets/main-music.wav");
 mainAudio.loop = "true";
+mainAudio.volume = 0.05;
 
 canvas.width = "600";
 canvas.height = "800";
@@ -118,6 +124,21 @@ function playWings() {
     wingsAudio.play();
   }
 }
+function playMain() {
+  if (mainAudio.paused) {
+    mainAudio.play();
+  }
+}
+function playWin() {
+  if (winAudio.paused) {
+    winAudio.play();
+  }
+}
+function playGameover() {
+  if (gameoverAudio.paused) {
+    gameoverAudio.play();
+  }
+}
 //----EVENT LISTENERS for MOTHER Dragon movements---
 document.addEventListener("keydown", (event) => {
   if (event.code == "ArrowRight") {
@@ -164,7 +185,9 @@ function drawMainUi() {
   scoreText.style.display = "block";
   ctx.drawImage(playscreen, 0, 0);
   scoreText.innerText = `Score : ${score}`;
-  // mainAudio.play();
+  playMain();
+  gameoverAudio.pause();
+  winAudio.pause();
 }
 //splash screen
 function drawSplashUI() {
@@ -175,6 +198,18 @@ function drawSplashUI() {
   scoreText.style.display = "none";
   canvas.style.display = "none";
 }
+//Win screen
+function drawWinScreen() {
+  winScreen.style.display = "block";
+  restartBtn.style.display = "block";
+  gameover.style.display = "none";
+  splashScreen.style.display = "none";
+  canvas.style.display = "none";
+  scoreText.style.display = "none";
+  wingsAudio.play();
+  winAudio.play();
+  mainAudio.pause();
+}
 
 //finished gameover UI-MVP done
 function gameOverUI() {
@@ -184,8 +219,8 @@ function gameOverUI() {
   canvas.style.display = "none";
   scoreText.style.display = "none";
   totalKilled.innerText = `Total number of Dragons killed: ${score}`;
-  // mainAudio.pause();
-  // gameoverAudio.play();
+  mainAudio.pause();
+  playGameover();
   // intervalId = requestAnimationFrame(gameOverUI);
 }
 //collision of Baby & mother
@@ -218,21 +253,13 @@ function drawBabyUpdate(
     );
   }
 }
-//Win screen
-function drawWinScreen() {
-  winScreen.style.display = "block";
-  restartBtn.style.display = "block";
-  gameover.style.display = "none";
-  splashScreen.style.display = "none";
-  canvas.style.display = "none";
-  scoreText.style.display = "none";
-}
+
 // move baby
 function characterAnimate(pWidth, pHeight, onCanvasX, onCanvasY) {
   //to keep track of number of frames
   frameCount++;
 
-  if (frameCount < 7) {
+  if (frameCount <= 15) {
     requestAnimationFrame(characterAnimate);
     // return;
   }
@@ -499,8 +526,9 @@ window.addEventListener("load", () => {
     mainGameOnStart();
   });
   //restart Button for win screen
-  restartBtn2.addEventListener("click", () => {
+  continueBtn.addEventListener("click", () => {
     winScreen.style.display = "none";
+    mainAudio.pause;
     reset();
     mainGameOnStart();
   });

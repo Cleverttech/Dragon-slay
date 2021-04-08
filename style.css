@@ -21,14 +21,14 @@ body {
   margin: auto;
 }
 #winscreen {
-  background: url("./assets/playscreen.png");
+  background: url("./assets/Win_screen.png");
   width: 600px;
   height: 800px;
   /* position: relative;
   float: right; */
 }
 .margin-left {
-  margin-left: 150px;
+  margin-left: 160px;
   margin-top: 50px;
 }
 .info {
@@ -44,10 +44,13 @@ body {
 }
 
 #restart,
-#start {
+#start,
+#continue {
   background-color: transparent;
   border: none;
 }
-#restart {
+
+#restart,
+#continue {
   margin-top: 470px;
 }
