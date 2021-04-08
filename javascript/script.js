@@ -109,32 +109,37 @@ let enemies = [
     img: imgArr[Math.floor(Math.random() * imgArr.length)],
   },
 ];
-let incrSpeedEnemies = 2;
+let incrSpeedEnemies = 1;
 let isWinGame = false;
 winScreen.style.display = "none";
 
+function playWings() {
+  if (wingsAudio.paused) {
+    wingsAudio.play();
+  }
+}
 //----EVENT LISTENERS for MOTHER Dragon movements---
 document.addEventListener("keydown", (event) => {
   if (event.code == "ArrowRight") {
     isArrowRight = true;
-    wingsAudio.play();
+    playWings();
     isArrowLeft = false;
     isArrowUp = false;
     isArrowDown = false;
   } else if (event.code == "ArrowLeft") {
-    wingsAudio.play();
+    playWings();
     isArrowLeft = true;
     isArrowRight = false;
     isArrowUp = false;
     isArrowDown = false;
   } else if (event.code == "ArrowUp") {
-    wingsAudio.play();
+    playWings();
     isArrowUp = true;
     isArrowRight = false;
     isArrowLeft = false;
     isArrowDown = false;
   } else if (event.code == "ArrowDown") {
-    wingsAudio.play();
+    playWings();
     isArrowDown = true;
     isArrowUp = false;
     isArrowRight = false;
@@ -185,7 +190,7 @@ function gameOverUI() {
 }
 //collision of Baby & mother
 function collionBabyMother() {
-  if (motherY <= 260 && motherX + mother1.width >= 545 && score >= 50) {
+  if (motherY <= 260 && motherX + mother1.width >= 545 && score >= 10) {
     isWinGame = true;
   }
 }
@@ -199,7 +204,7 @@ function drawBabyUpdate(
   updateWidth,
   updateHeight
 ) {
-  if (score >= 50) {
+  if (score >= 10) {
     ctx.drawImage(
       babyFrame,
       frameX * babyFrame.width,
@@ -334,7 +339,7 @@ function randomSize() {
 function speedIncr() {
   if (score > 0 && score % 5 === 0 && incrSpeed) {
     incrSpeed = false;
-    incrSpeedEnemies *= 1.35;
+    incrSpeedEnemies *= 1.2;
     console.log(incrSpeedEnemies);
   }
 }
@@ -415,7 +420,7 @@ function reset() {
   incrSpeed = false;
   isGameOver = false;
   score = 0;
-  score2 = score;
+  // score2 = score;
   (canvasX = 0), (canvasY = 0);
   //cloud position Array
   clouds = [
