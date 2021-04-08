@@ -481,7 +481,6 @@ function mainGameOnStart() {
 
 //EVENT Listeners
 window.addEventListener("load", () => {
-  win;
   drawSplashUI();
   // gameOverUI();
 
