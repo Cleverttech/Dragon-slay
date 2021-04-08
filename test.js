@@ -263,7 +263,7 @@ function drawBabyUpdate(
 // move baby
 function characterAnimate(pWidth, pHeight, onCanvasX, onCanvasY) {
   frameCount += 1.4;
-  ctx.clearRect(onCanvasX, onCanvasY, pWidth, pHeight);
+  // ctx.clearRect(onCanvasX, onCanvasY, pWidth, pHeight);
   ctx.imageSmoothingEnabled = false;
   if (frameCount <= 7) {
     // requestAnimationFrame(characterAnimate);
@@ -284,8 +284,8 @@ function characterAnimate(pWidth, pHeight, onCanvasX, onCanvasY) {
   if (currentLoopIndex >= cycleLoop.length) {
     currentLoopIndex = 0;
   }
-  //   window.requestAnimationFrame(characterAnimate);
-  //   return;
+  window.requestAnimationFrame(characterAnimate);
+  return;
 }
 //draw & MoveMother
 function moveMother() {
@@ -513,7 +513,7 @@ function reset() {
 
 //----MAINGAME putting it all together-----
 function mainGameOnStart() {
-  //   ctx.clearRect(0, 0, canvas.width, canvas.height);
+  ctx.clearRect(0, 0, canvas.width, canvas.height);
   drawMainUi();
   moveCloud();
   moveMother();
