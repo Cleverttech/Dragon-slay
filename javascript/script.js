@@ -183,7 +183,12 @@ function gameOverUI() {
   // gameoverAudio.play();
   // intervalId = requestAnimationFrame(gameOverUI);
 }
-
+//collision of Baby & mother
+function collionBabyMother() {
+  if (motherY <= 260 && motherX + mother1.width >= 545 && score >= 50) {
+    isWinGame = true;
+  }
+}
 //draw baby
 function drawBabyUpdate(
   babyFrame,
@@ -194,17 +199,19 @@ function drawBabyUpdate(
   updateWidth,
   updateHeight
 ) {
-  ctx.drawImage(
-    babyFrame,
-    frameX * babyFrame.width,
-    frameY * babyFrame.height,
-    babyFrame.width, //width
-    babyFrame.height, //height
-    canvasX,
-    canvasY,
-    updateWidth, // scaledWidth
-    updateHeight // scaledHeight
-  );
+  if (score >= 50) {
+    ctx.drawImage(
+      babyFrame,
+      frameX * babyFrame.width,
+      frameY * babyFrame.height,
+      babyFrame.width, //width
+      babyFrame.height, //height
+      canvasX,
+      canvasY,
+      updateWidth, // scaledWidth
+      updateHeight // scaledHeight
+    );
+  }
 }
 //Win screen
 function drawWinScreen() {
@@ -365,16 +372,14 @@ function moveEnemies() {
 function collision() {
   for (let i = 0; i < enemies.length; i++) {
     if (
-      motherX < enemies[i].x + enemies[i].width &&
+      motherX + 50 < enemies[i].x + enemies[i].width &&
       motherX + mother1.width > enemies[i].x &&
-      motherY < enemies[i].y + enemies[i].height &&
+      motherY + 50 < enemies[i].y + enemies[i].height &&
       motherY + enemies[i].height > enemies[i].y
     ) {
       isGameOver = true;
     }
-    if (score == 2) {
-      isWinGame = true;
-    }
+
     for (let j = 0; j < fireballs.length; j++) {
       if (
         fireballs[j].x < enemies[i].x + enemies[i].width &&
@@ -388,7 +393,6 @@ function collision() {
         score++;
         incrSpeed = true;
 
-        console.log(score, score2);
         if (enemies.length <= 0) {
           initalSize = randomSize();
           enemies.push({
@@ -463,6 +467,7 @@ function mainGameOnStart() {
   drawFireball(); //fireballs
   moveEnemies(); // making the enemies moves
   collision(); //all collisions
+  collionBabyMother();
   speedIncr();
   //define GameOver
   if (isGameOver) {
@@ -483,12 +488,14 @@ window.addEventListener("load", () => {
   drawSplashUI();
   // gameOverUI();
 
-  //restart Button
+  //restart Button for splash screen
   restartBtn.addEventListener("click", () => {
     reset();
     mainGameOnStart();
   });
+  //restart Button for win screen
   restartBtn2.addEventListener("click", () => {
+    winScreen.style.display = "none";
     reset();
     mainGameOnStart();
   });
