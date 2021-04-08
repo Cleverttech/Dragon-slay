@@ -31,6 +31,9 @@ enemy1.src = "./assets/enemy1.png";
 let enemy2 = new Image(100, 100);
 enemy2.src = "./assets/enemy2.png";
 
+let explosion = new Image(40, 40);
+explosion.src = "./assets/explosion.png";
+
 let mother1 = new Image(110, 110);
 mother1.src = "./assets/mother1.png";
 
@@ -98,6 +101,9 @@ let isSpaceKey = false;
 //fireballs variables
 fireball.width = 20;
 fireball.height = 20;
+
+explosion.width = 10;
+explosion.height = 10;
 
 let fireballs = [];
 let fire = true;
@@ -367,10 +373,10 @@ function speedIncr() {
   if (score > 0 && score % 5 === 0 && incrSpeed) {
     incrSpeed = false;
     incrSpeedEnemies *= 1.2;
-    console.log(incrSpeedEnemies);
   }
 }
 
+//move enemies
 function moveEnemies() {
   for (let i = 0; i < enemies.length; i++) {
     ctx.drawImage(
@@ -421,6 +427,7 @@ function collision() {
       ) {
         fireballs.splice(j, 1);
         enemies.splice(i, 1);
+        // ctx.drawImage(explosion, enemies[i].x + 70, enemies[i].y + 80);
         fire = true;
         score++;
         incrSpeed = true;
