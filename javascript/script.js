@@ -19,9 +19,6 @@ cloud1.src = "./assets/cloud1.png";
 let cloud2 = new Image();
 cloud2.src = "./assets/cloud2.png";
 
-// let cloud3 = new Image();
-// cloud3.src = "./assets/cloud2.png";
-
 let playscreen = new Image();
 playscreen.src = "./assets/playscreen.png";
 
@@ -125,6 +122,10 @@ let incrSpeedEnemies = 1;
 let isWinGame = false;
 winScreen.style.display = "none";
 
+let frameNo = 0;
+const switchImg = [mother2, mother1];
+const switchImgFrames = 10;
+
 function playWings() {
   if (wingsAudio.paused) {
     wingsAudio.play();
@@ -227,7 +228,6 @@ function gameOverUI() {
   totalKilled.innerText = `Total number of Dragons killed: ${score}`;
   mainAudio.pause();
   playGameover();
-  // intervalId = requestAnimationFrame(gameOverUI);
 }
 //collision of Baby & mother
 function collionBabyMother() {
@@ -235,7 +235,7 @@ function collionBabyMother() {
     isWinGame = true;
   }
 }
-//draw baby
+//draw baby + appearance condition
 function drawBabyUpdate(
   babyFrame,
   frameX,
@@ -245,48 +245,40 @@ function drawBabyUpdate(
   updateWidth,
   updateHeight
 ) {
-  if (score >= 10) {
+  if (score >= 5) {
     ctx.drawImage(
       babyFrame,
       frameX * babyFrame.width,
       frameY * babyFrame.height,
-      babyFrame.width, //width
-      babyFrame.height, //height
+      babyFrame.width,
+      babyFrame.height,
       canvasX,
       canvasY,
-      updateWidth, // scaledWidth
-      updateHeight // scaledHeight
+      updateWidth,
+      updateHeight
     );
   }
 }
 
 // move baby
 function characterAnimate(pWidth, pHeight, onCanvasX, onCanvasY) {
-  //to keep track of number of frames
-  frameCount += 1.4;
-  ctx.clearRect(onCanvasX, onCanvasY, pWidth, pHeight);
   ctx.imageSmoothingEnabled = false;
-  if (frameCount <= 15) {
-    // requestAnimationFrame(characterAnimate);
-    drawBabyUpdate(
-      babyFrame,
-      cycleLoop[currentLoopIndex],
-      0,
-      onCanvasX,
-      onCanvasY,
-      pWidth,
-      pHeight
-    );
-  } else {
-    frameCount = 0;
+  drawBabyUpdate(
+    babyFrame,
+    cycleLoop[currentLoopIndex],
+    0,
+    onCanvasX,
+    onCanvasY,
+    pWidth,
+    pHeight
+  );
+  if (intervalId % 10 == 0) {
     currentLoopIndex++;
   }
 
   if (currentLoopIndex >= cycleLoop.length) {
     currentLoopIndex = 0;
   }
-  window.requestAnimationFrame(characterAnimate);
-  return;
 }
 //draw & MoveMother
 function moveMother() {
@@ -301,12 +293,23 @@ function moveMother() {
 
   if (isArrowDown && mother1.height + motherY < canvas.height) motherY += 10;
 }
+
 //to animate mother sprite
-function motherAnim() {}
+function motherAnim() {
+  frameNo += 1.4;
+  ctx.clearRect(0, 0, canvas.width, canvas.height);
+  ctx.imageSmoothingEnabled = false;
+  const motherImg =
+    switchImg[((frameNo / switchImgFrames) | 0) % switchImg.length];
+  if (isArrowRight || isArrowLeft) {
+    ctx.drawImage(motherImg, motherX, motherY, mother1.width, mother1.height);
+  } else {
+    ctx.drawImage(mother1, motherX, motherY, mother1.width, mother1.height);
+  }
+}
 
 //cloud animation
 function moveCloud() {
-  //   animation conditions
   let countInterval = 50;
   let speedInterval = Math.floor(Math.random() * 0.5);
   for (let i = 0; i < clouds.length; i++) {
@@ -332,7 +335,6 @@ function moveCloud() {
     }
     clouds[i].y -= speedInterval;
   }
-  // window.requestAnimationFrame(moveCloud);
 }
 
 //On -hold animate clouds for splash screen
@@ -498,24 +500,23 @@ function reset() {
 
 //----MAINGAME putting it all together-----
 function mainGameOnStart() {
+  ctx.clearRect(0, 0, canvas.width, canvas.height);
   drawMainUi();
   moveCloud();
-  characterAnimate(65, 69, 545, 260);
   moveMother();
-  // motherAnim();
+  motherAnim();
+  characterAnimate(65, 69, 545, 260);
   createFireball();
-  drawFireball(); //fireballs
-  moveEnemies(); // making the enemies moves
-  collision(); //all collisions
+  drawFireball();
+  moveEnemies();
+  collision();
   collionBabyMother();
   speedIncr();
   //define GameOver
   if (isGameOver) {
-    reset();
     cancelAnimationFrame(intervalId);
     gameOverUI();
   } else if (isWinGame) {
-    reset();
     cancelAnimationFrame(intervalId);
     drawWinScreen();
   } else {
@@ -526,7 +527,6 @@ function mainGameOnStart() {
 //EVENT Listeners
 window.addEventListener("load", () => {
   drawSplashUI();
-  // gameOverUI();
 
   //restart Button for splash screen
   restartBtn.addEventListener("click", () => {
