@@ -28,7 +28,7 @@ body {
   margin: auto;
 }
 #winscreen {
-  background: url("./assets/Win_screen.png");
+  background: url("./assets/Win_Screen.png");
   width: 600px;
   height: 800px;
   /* position: relative;
