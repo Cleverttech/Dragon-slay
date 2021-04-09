@@ -402,10 +402,10 @@ function moveEnemies() {
         img: imgArr[Math.floor(Math.random() * imgArr.length)],
       });
     }
-    if (enemies[i].y > canvas.height + 2) {
-      enemies.shift();
-      score--;
-    }
+//     if (enemies[i].y > canvas.height + 2) {
+//       enemies.shift();
+//       score--;
+//     }
   }
 }
 
