@@ -309,33 +309,33 @@ function motherAnim() {
 }
 
 //cloud animation
-function moveCloud() {
-  let countInterval = 50;
-  let speedInterval = Math.floor(Math.random() * 0.5);
-  for (let i = 0; i < clouds.length; i++) {
-    countInterval += 10;
-    speedInterval += 0.1;
+// function moveCloud() {
+//   let countInterval = 50;
+//   let speedInterval = Math.floor(Math.random() * 0.7);
+//   for (let i = 0; i < clouds.length; i++) {
+//     countInterval += 10;
+//     speedInterval += 0.1;
 
-    ctx.drawImage(
-      cloud2,
-      clouds[i].x,
-      clouds[i].y + (cloud1.height + countInterval),
-      200,
-      140
-    );
+//     ctx.drawImage(
+//       cloud2,
+//       clouds[i].x,
+//       clouds[i].y + (cloud1.height + countInterval),
+//       200,
+//       140
+//     );
 
-    ctx.drawImage(cloud1, clouds[i].x, clouds[i].y, 150, 100);
-    ctx.drawImage(cloud2, clouds[i].x + 300, clouds[i].y + 100, 100, 70);
+//     ctx.drawImage(cloud1, clouds[i].x, clouds[i].y, 150, 100);
+//     ctx.drawImage(cloud2, clouds[i].x + 300, clouds[i].y + 100, 100, 70);
 
-    if (clouds[i].y + cloud2.height < 0 || clouds[i].y + cloud1.height < 0) {
-      clouds[i] = {
-        x: Math.floor(Math.random() * 100),
-        y: 200,
-      };
-    }
-    clouds[i].y -= speedInterval;
-  }
-}
+//     if (clouds[i].y + cloud2.height < 0 || clouds[i].y + cloud1.height < 0) {
+//       clouds[i] = {
+//         x: Math.floor(Math.random() * 100),
+//         y: 200,
+//       };
+//     }
+//     clouds[i].y -= speedInterval;
+//   }
+// }
 
 //On -hold animate clouds for splash screen
 function cloudAnimationSplash() {
@@ -449,6 +449,7 @@ function collision() {
     }
   }
 }
+
 //RESET game variables
 function reset() {
   motherX = 100;
@@ -502,7 +503,7 @@ function reset() {
 function mainGameOnStart() {
   ctx.clearRect(0, 0, canvas.width, canvas.height);
   drawMainUi();
-  moveCloud();
+  // moveCloud();
   moveMother();
   motherAnim();
   characterAnimate(65, 69, 545, 260);
