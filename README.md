@@ -2,7 +2,7 @@
 
 [See live-Demo](https://cleverttech.github.io/Dragon-slay/)
 
-<img src="https://github.com/Cleverttech/Dragon-slay/blob/main/dragon-demo.PNG" alt="demo-Image" margin="auto 0px" width="340" height="220"/>
+<img src="https://github.com/Cleverttech/Dragon-slay/blob/main/dragon-demo.PNG" alt="demo-Image" margin="auto 0px" width="300" height="340"/>
 
 
 ## Description
