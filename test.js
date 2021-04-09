@@ -245,7 +245,7 @@ function drawBabyUpdate(
   updateWidth,
   updateHeight
 ) {
-  if (score >= 2) {
+  if (score >= 5) {
     ctx.drawImage(
       babyFrame,
       frameX * babyFrame.width,
@@ -303,7 +303,7 @@ function moveMother() {
 
 let frameNo = 0;
 const switchImg = [mother2, mother1]; // add animation sequence to arr
-const switchImgFrames = 15;
+const switchImgFrames = 10;
 //to animate mother sprite
 function motherAnim() {
   frameNo += 1.4;
